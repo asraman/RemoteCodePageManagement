@@ -2,7 +2,7 @@
 > This is an academic project for the course CSE687. It is focused on building tools for software development. There are many state-of-the-art tools like Visual Studio, Gitlab, Github, which does the same but for many big companies, they use the tools of their own. The project provides you the opportunity to practice OOD principles with building big software, it also illustrates some common practice in the industry.
 
 This project was built in 4 stages and the detailed information is as follows:
->I have built packages with the name Converter, Display, DependencyAnalyzer, Execute and GUI whereas the rest of the packags were provided by the instructor as helper codes for the implementation. With the help of utilization of the helper codes the software was developed in a span of 4 months 
+>I have built packages with the name Converter, Display, DependencyAnalyzer, Execute and GUI whereas the rest of the packags were provided by the instructor as helper codes for the implementation. With the help of utilization of the helper codes the software was developed in a span of 4 months. 
 
 
 ## Project Work Flow from Project-1 to Project-4 
@@ -12,7 +12,7 @@ This project was built in 4 stages and the detailed information is as follows:
 ## Project #1 - Source Code Publisher 
 
 ### Finds and Loads a file for processing:
-Files will be loaded when their names match a regular expression. That might be as simple as *.h & *.cpp, but will often be somewhat more complex. You will spend some time getting familiar with the C++11 regex classes. Files that match can be opened with the std::iostream facilities.
+Files will be loaded when their names match a regular expression. That might be as simple as *.h & *.cpp, but will often be somewhat more complex. You will spend some time getting familiar with the C++11 regex classes. Files that match can be opened with the std::iostream functionality.
 ### Converts file into a webpage fragment:
 This involves creating a new file with the same name, but with an html extension. Contents of the source code file are copied directly to the html file.
 Then all html markup characters are replaced with their escape sequence equivalents, e.g., < is replaced by &lt, > is replaced by &gt, etc.
