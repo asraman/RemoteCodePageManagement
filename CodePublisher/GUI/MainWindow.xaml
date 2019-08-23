@@ -1,0 +1,111 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="Project #4 (ASR)" Height="450" Width="800" Padding="20" FontFamily="tahoma" Loaded="Window_Loaded" Background="#ccc">
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////
+    // MainWindow.xaml - GUI for Project #4                              //
+    // ver 1.0                                                           //
+    // Anirudh Raman, CSE687 - Object Oriented Design, Spring 2019       //
+    ///////////////////////////////////////////////////////////////////////
+    -->
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Background="#214c63"/>
+
+        <Grid Background="#214c63">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+
+            <!--Navigation Tab-->
+            <TabControl Name="TabCtrl" Grid.Row="1" >
+                <TabItem Header="Navigate Files">
+                    <Grid Background="#214c63">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--row 0-->
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"  Content="Path:/" Foreground="white"></Label>
+                        <TextBox Name="txtPath" Grid.Row="0" Grid.Column="1" 
+                                  IsReadOnly="True" Grid.ColumnSpan="3" VerticalAlignment="Center" Background="#d32f2f" Foreground="white"/>
+                        <Label Grid.Row="0" Grid.Column="4" Content="Sub-Dirs:" Foreground="white" Margin="5"/>
+                        <CheckBox Name="cbRecurse" Grid.Row="0" Grid.Column="5" IsChecked="True" Padding="5" VerticalAlignment="Center" Margin="5"/>
+
+                        <!--row 1-->
+                        <Separator Grid.Row="1" Grid.ColumnSpan="6" />
+
+                        <!--row 2-->
+                        <Label Grid.Row="2" Grid.ColumnSpan="6" Content="Directories &amp; Files" Foreground="white"/>
+
+                        <!--row 3-->
+                        <ListBox Name="lstFiles" Grid.Row="3" Grid.ColumnSpan="6" MouseDoubleClick="DirList_MouseDoubleClick" Background="#d32f2f" Foreground="white" Margin="5"/>
+
+                        <!--row 4-->
+                        <Separator Grid.Row="4" Grid.ColumnSpan="6" />
+
+                        <!--row 5-->
+                        <Label Grid.Row="5" Grid.Column="0" Content="Patterns:" Foreground="white"/>
+                        <TextBox Name="txtPatterns" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Background="#d32f2f" Foreground="white" Margin="5"/>
+                        <Label Grid.Row="5" Grid.Column="2" Content="Regex:"  Foreground="white"/>
+                        <TextBox Name="txtRegex" Grid.Row="5" Grid.Column="3"  Grid.ColumnSpan="5" VerticalAlignment="Center" Background="#d32f2f" Foreground="white" Margin="5"/>
+
+                        <!--row 6-->
+                        <Separator Grid.Row="6" Grid.ColumnSpan="6"/>
+
+                        <!--row 7-->
+                        <Button Name="btnPublish" Grid.Row="7" Grid.ColumnSpan="6" 
+                                Content="Publish Files" Click="BtnPublish_Click" Margin="5" Background="#306010" Foreground="white"/>
+                    </Grid>
+                </TabItem>
+
+                <!--Converted Webpages Tab-->
+                <TabItem Header="Converted Webpages" Name ="Auto_Tab">
+                    <Grid Background="#214c63">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Content="Converted Files" Background="#214c63" Foreground="white"/>
+                        <ListBox Name="lstConvertedFiles" Grid.Row="1" Margin="5" 
+                            MouseDoubleClick="LstConvertedFiles_MouseDoubleClick" Background="#d32f2f" Foreground="White"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <StatusBar Grid.Row="2" Background="#214c63">
+                <TextBlock Name="txtProgress" Text="Ready" Foreground="white"/>
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>
+

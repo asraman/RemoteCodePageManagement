@@ -1,0 +1,86 @@
+<!Document html>
+<html>
+<head>
+<link rel = "stylesheet" href = "style.css">
+<script src="showHideClass.js"></script>
+</head>
+<body>
+<button onclick = "showHideClass('classes')">Show or Hide Class Contents</button>
+<button onclick = "showHideClass('functions')">Show or Hide Function Contents</button>
+<button onclick = "showHideClass('comments')">Show or Hide Comments</button><br>This file is not dependent on anything<pre>
+<div class="comments">/////////////////////////////////////////////////////////////////////////////</div>
+<div class="comments">// DgbShim.h  : defines a warpper for IExecutive which works with .NET code//</div>
+<div class="comments">// ver 1.0                                                                 //</div>
+<div class="comments">//                                                                         //</div>
+<div class="comments">// Application    : C++/CLI DgbShim demostration                           //</div>
+<div class="comments">// Language:    Visual C++, Visual Studio 2017                             //</div>
+<div class="comments">// Platform:    HP Envy x360 , Ryzen 7, Windows 10                         //</div>
+<div class="comments">// Application: Fall Project, 2018                                         //</div>
+<div class="comments">// Author:      Dhruv G BHatti, class 2018-2020, Syracuse University       //</div>
+<div class="comments">//              (571) 635 0862, dgbhatti@syr.edu                           //</div>
+<div class="comments">/////////////////////////////////////////////////////////////////////////////</div>
+<div class="comments">/*
+*  Package Description:
+* ======================
+*  This package defines DgbShim class which can be used by .NET applications.
+*  In this project, DgbShim is used in WPF project to allow making calls from
+*  WPF C# code to Executive native C++ code. The DgbShim is a mangaged (.NET)
+*  wrapper around IExecutive interface which can make calls to native C++
+*  classes and, in the same time, can be called by any .NET code (C# here).
+*
+*  Public Interface:
+* ===================
+*  DgbShim obj
+*  obj.start(args);
+*  obj.initialization(argc, argv);
+*  obj.vectorToList(files);
+*
+*  Required Files:
+* =================
+*  DgbShim.h DgbShim.cpp IExecutive.h
+*
+*  Build Command:
+* ================
+*  msbuild DgbShim.vcxproj
+*
+*  Maintainence History:
+* =======================
+*  ver 1.0 - April 5th 2019
+*    - first release
+*
+*/</div>
+
+#pragma once
+
+#include &lt;string&gt;
+#include "../executive/IExecutive.h"
+#include&lt;vector&gt;
+
+using namespace System;
+using namespace System::Collections::Generic;
+
+<div class="comments">// 'public ref' identifier tells the compiler this is</div>
+<div class="comments">// a managed class, not native C++ class. this class</div>
+<div class="comments">// has to be managed for the C# code in WPF to be able</div>
+<div class="comments">// to use it. You CAN define native classes here but in</div>
+<div class="comments">// this demo there is no point to do so. </div>
+public ref class DgbShim<div class="classes">{
+public:
+	DgbShim();
+	~DgbShim();
+	<div class="comments">//void start();</div>
+	std::vector&lt;std::string&gt; initialization(int argc, char ** argv);
+	List&lt;String^&gt;^ start(List&lt;String^&gt;^ args);
+	List&lt;String^&gt;^ vectorToList(const std::vector&lt;std::string&gt;& files);
+private:
+	<div class="comments">// convert System::String to std::string</div>
+	std::string sysStrToStdStr(String^ str);
+	<div class="comments">// convert std::string to System::String</div>
+	String^ stdStrToSysStr(const std::string& str);
+	<div class="comments">// this will point to CppClass when instantiated through the ObjectFactory</div>
+	IExecutiveClass* client;
+};</div>
+</pre>
+</body
+></html
+>

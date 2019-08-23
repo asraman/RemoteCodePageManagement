@@ -1,0 +1,281 @@
+<!Document html>
+<html>
+<head>
+<link rel = "stylesheet" href = "style.css">
+<script src="showHideClass.js"></script>
+</head>
+<body>
+<button onclick = "showHideClass('classes')">Hide Classes</button>
+<button onclick = "showHideClass('functions')">Hide Functions</button>
+<button onclick = "showHideClass('comments')">Hide Comments</button><br><a href="Converter.h.html ">Converter.h</a>&nbsp&nbsp&nbsp&nbsp<pre>
+<div class="comments">///////////////////////////////////////////////////////////////////////////</div>
+<div class="comments">// Converter.cpp   : implements and provides test stub for Converter.h   //</div>
+<div class="comments">// ver 1.1                                                               //</div>
+<div class="comments">//                                                                       // </div>
+<div class="comments">// Platform      : Visual Studio Enterprise 2017, Windows 10 Pro x64     //</div>
+<div class="comments">// Author        : Anirudh Shankar Raman, Syracuse University            //</div>
+<div class="comments">//                 CSE687 - Object Oriented Design, Spring 2019          //</div>
+<div class="comments">///////////////////////////////////////////////////////////////////////////</div>
+
+#include "Converter.h"
+
+namespace HTML {
+
+	<div class="comments">//default constructor</div>
+	converter::converter()
+<div class="functions">	{
+	}</div>
+
+	<div class="comments">//default destructor</div>
+	converter::~converter()
+<div class="functions">	{
+	}</div>
+
+	<div class="comments">// A function that converts cpp file to valid HTML file</div>
+	std::string converter::cppToHtml(std::string filesToProcess_,std::map&lt;std::string, std::vector&lt;std::string&gt;&gt; depT, const TypeInfoT &typeTable)
+<div class="functions">	{
+		std::string fileName = FileSystem::Path::getName(filesToProcess_);
+		std::ifstream in(filesToProcess_);
+		std::vector&lt;std::string&gt; fileContent;
+
+		auto checkIter = depT.find(fileName);
+
+		for (std::string line; std::getline(in, line);) {
+
+			<div class="comments">//Replacing special character &lt; &gt;</div>
+			while (line.find("&lt;") != -1)
+				line.replace(line.find("&lt;"), 1, "&lt;");
+			while (line.find("&gt;") != -1)
+				line.replace(line.find("&gt;"), 1, "&gt;");
+			fileContent.push_back(line);
+		}
+
+		HandlingComments(fileContent, typeTable);
+		DivTagsAdded(filesToProcess_, fileContent, typeTable);
+
+		std::string dirPath = "..\\ConvertedPages";
+		std::string webPath = dirPath + "<div class="comments">//" + fileName + ".html";</div>
+		std::ofstream webpageOutput(webPath);
+
+		webpageOutput &lt;&lt; "&lt;!Document html&gt;\n";
+		webpageOutput &lt;&lt; "&lt;html&gt;\n";
+		webpageOutput &lt;&lt; "&lt;head&gt;\n";
+		webpageOutput &lt;&lt; "&lt;link rel = \"stylesheet\" href = \"style.css\"&gt;\n";
+		webpageOutput &lt;&lt; "&lt;script src=\"showHideClass.js\"&gt;&lt;/script&gt;\n";
+		webpageOutput &lt;&lt; "&lt;/head&gt;\n";
+		webpageOutput &lt;&lt; "&lt;body&gt;\n";
+		webpageOutput &lt;&lt; "&lt;button onclick = \"showHideClass(\'classes\')\"&gt;Hide Classes&lt;/button&gt;\n";
+		webpageOutput &lt;&lt; "&lt;button onclick = \"showHideClass(\'functions\')\"&gt;Hide Functions&lt;/button&gt;\n";
+		webpageOutput &lt;&lt; "&lt;button onclick = \"showHideClass(\'comments\')\"&gt;Hide Comments&lt;/button&gt;&lt;br&gt;";
+		dependenciesFetch(filesToProcess_, depT, webpageOutput);
+		webpageOutput &lt;&lt; "&lt;pre&gt;\n";
+		for (auto content : fileContent)
+			webpageOutput &lt;&lt; content &lt;&lt; "\n";
+		webpageOutput &lt;&lt; "&lt;/pre&gt;\n";
+		webpageOutput &lt;&lt; "&lt;/body\n&gt;";
+		webpageOutput &lt;&lt; "&lt;/html\n&gt;";
+
+		webpageOutput.close();
+		return webPath;
+	}</div>
+	
+	<div class="comments">// Receives the dependencies of each file</div>
+	void converter::dependenciesFetch(std::string & filesToProcess, const std::map&lt;std::string, std::vector&lt;std::string&gt;&gt;& depTable, std::ofstream & webpageOutput)
+<div class="functions">	{
+		auto iter = depTable.find(filesToProcess);
+		if (iter == depTable.end()) {
+			webpageOutput &lt;&lt; "No Dependency found";
+			return;
+		}
+		else {
+			auto iter2 = iter-&gt;second;
+			if (iter2.size() == 0)
+				webpageOutput &lt;&lt; "No Dependency found";
+			else {
+				for (size_t i = 0; i &lt; iter2.size(); i++) {
+					webpageOutput &lt;&lt; "&lt;a href=\"" + iter2[i] + ".html \"&gt;" + iter2[i] + "&lt;/a&gt;" + "&nbsp&nbsp&nbsp&nbsp";
+				}
+			}
+		}
+	}</div>
+	
+	<div class="comments">// Takes care of the showing and hiding the comments part</div>
+	void converter::HandlingComments(std::vector&lt;std::string&gt;& filedata, const TypeInfoT & typeTable)
+<div class="functions">	{
+
+		bool isComment = false;
+		size_t found;
+		for (size_t i = 0; i &lt; filedata.size(); i++) {
+			found = filedata[i].find("<div class="comments">//");</div>
+			if (found != filedata[i].npos) {
+				filedata[i].replace(found, 2, "&lt;div class=\"comments\"&gt;<div class="comments">//");</div>
+				filedata[i].replace(filedata[i].size(), filedata[i].size(), "&lt;/div&gt;");
+			}
+			found = filedata[i].find("<div class="comments">/*");
+			if (found != filedata[i].npos) {
+				isComment = true;
+				filedata[i].replace(found, 2, "&lt;div class=\"comments\"&gt;<div class="comments">/*");
+			}
+			if (isComment) {
+				size_t muLineC = filedata[i].find("*/</div>");
+				if (muLineC != filedata[i].npos) {
+					filedata[i].replace(muLineC, 2, "*/&lt;/div&gt;");
+					isComment = false;
+				}
+			}
+		}
+	}</div>
+
+	<div class="comments">//This function is responsible for divTags</div>
+	void converter::DivTagsAdded(std::string & file, std::vector&lt;std::string&gt;& filedata, const TypeInfoT & typeTable)
+<div class="functions">	{
+		auto iter = typeTable.find(file);
+		if (iter != typeTable.end()) {
+			auto iter2 = iter-&gt;second.begin();
+			size_t i;
+			while (iter2 != iter-&gt;second.end())
+			{
+				size_t lineNo = iter2-&gt;first;
+				SwitchFn(i, filedata, iter2, lineNo);
+				iter2++;
+			}
+		}
+	}</div>
+	
+
+	<div class="comments">//This function runs the switch functionality</div>
+	void converter::SwitchFn(size_t & i, std::vector&lt;std::string&gt;& filedata, std::map&lt;std::size_t, DependencyAnalysis::TypeInfo&gt;::const_iterator & iter2, size_t lineNo)
+<div class="functions">	{
+		switch (iter2-&gt;second) {
+		case DependencyAnalysis::TypeInfo::classes:
+			HandlingClasses(i, filedata, lineNo);
+			break;
+		case DependencyAnalysis::TypeInfo::function:
+			HandlingFunctions(i, filedata, lineNo);
+			break;
+		case DependencyAnalysis::TypeInfo::singleLineFn:
+			HandlingSingleLnFOpen(i, filedata, lineNo);
+			HandlingSingleLnFClose(i, filedata, lineNo);
+			break;
+		case DependencyAnalysis::TypeInfo::end:
+			i = filedata[lineNo - 1].find("\t};");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 3, "\t};&lt;/div&gt;"); break;
+			}
+			i = filedata[lineNo - 1].find("};");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 2, "};&lt;/div&gt;"); break;
+			}
+			i = filedata[lineNo - 1].find("\t}");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 2, "\t}&lt;/div&gt;"); break;
+			}
+			i = filedata[lineNo - 1].find("}");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 1, "}&lt;/div&gt;"); break;
+			}
+			i = filedata[lineNo - 1].find("\t*/");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 3, "\t*/&lt;/div&gt;"); break;
+			}
+			i = filedata[lineNo - 1].find("*/");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 2, "*/&lt;/div&gt;"); break;
+			}break;
+		default: break;
+		}
+	}</div>
+
+	<div class="comments">// In this function classes are shown or hidden</div>
+	void converter::HandlingClasses(size_t & i, std::vector&lt;std::string&gt;& filedata, size_t & lineNo)
+<div class="functions">	{
+		i = filedata[lineNo - 1].find("\t{");
+		if (i != filedata[lineNo - 1].npos) {
+			filedata[lineNo - 1].replace(i, 2, "&lt;div class=\"classes\"&gt;\t{");
+		}
+		else {
+			i = filedata[lineNo - 1].find("{");
+			if (i != filedata[lineNo - 1].npos)
+				filedata[lineNo - 1].replace(i, 1, "&lt;div class=\"classes\"&gt;{");
+		}
+	}</div>
+	
+	<div class="comments">// In this function, functions are shown or hidden</div>
+	void converter::HandlingFunctions(size_t & i, std::vector&lt;std::string&gt;& filedata, size_t & lineNo)
+<div class="functions">	{
+		i = filedata[lineNo - 1].find("\t{");
+		if (i != filedata[lineNo - 1].npos) {
+			filedata[lineNo - 1].replace(i, 2, "&lt;div class=\"functions\"&gt;\t{");
+		}
+		else {
+			i = filedata[lineNo - 1].find("{");
+			if (i != filedata[lineNo - 1].npos)
+				filedata[lineNo - 1].replace(i, 1, "&lt;div class=\"functions\"&gt;{");
+		}
+	}</div>
+	
+	<div class="comments">// In this function, single line functions are taken care of</div>
+
+	void converter::HandlingSingleLnFOpen(size_t & i, std::vector&lt;std::string&gt;& filedata, size_t & lineNo)
+<div class="functions">	{
+
+		i = filedata[lineNo - 1].find("\t{");
+		if (i != filedata[lineNo - 1].npos) {
+			filedata[lineNo - 1].replace(i, 2, "&lt;div class=\"functions\"&gt;\t{");
+		}
+		else {
+			i = filedata[lineNo - 1].find("{");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 1, "&lt;div class=\"functions\"&gt;{");
+			}
+		}
+	}</div>
+<div class="comments">//This function handles single line function close</div>
+	void converter::HandlingSingleLnFClose(size_t & i, std::vector&lt;std::string&gt;& filedata, size_t & lineNo)
+<div class="functions">	{
+		i = filedata[lineNo - 1].find("\t}");
+		if (i != filedata[lineNo - 1].npos) {
+			filedata[lineNo - 1].replace(i, 2, "\t}&lt;/div&gt;");
+		}
+		else {
+			i = filedata[lineNo - 1].find("}");
+			if (i != filedata[lineNo - 1].npos) {
+				filedata[lineNo - 1].replace(i, 1, "}&lt;/div&gt;");
+			}
+		}
+	}</div>
+
+	
+
+	
+}</div>
+
+<div class="comments">//Test Stub for converter package</div>
+#ifdef TEST_converter
+
+int main()
+<div class="functions">{
+	std::cout &lt;&lt; "\tTesting independent package implementation from test stub." &lt;&lt; "\n";
+	std::cout &lt;&lt; "\t**********************************************************" &lt;&lt; "\n\n\n";
+	TestStub for project 2
+	std::vector&lt;std::string&gt; htmlFiles;
+	std::vector&lt;std::string&gt; filesRetreived;
+	filesRetreived.push_back("./converter.cpp");
+	HTML::converter conv;
+	for (auto file : filesRetreived) {
+		htmlFiles.push_back(conv.cppToHtml(file));
+	}
+	std::cout &lt;&lt; "Printing converted file names" &lt;&lt; "\n";
+	for (auto fileName : htmlFiles)
+		std::cout &lt;&lt; fileName &lt;&lt; "\n";
+	getchar();
+	return 0;
+	std::cout &lt;&lt; "converter package is dependent on Dependencies package and Dependencies package is dependent on parser." &lt;&lt; "\n";
+	std::cout &lt;&lt; "Thus it is not possible to demonstrate converter as an independent Package" &lt;&lt; "\n";
+}</div>
+
+#endif
+</pre>
+</body
+></html
+>

@@ -1,0 +1,81 @@
+<!Document html>
+<html>
+<head>
+<link rel = "stylesheet" href = "style.css">
+<script src="showHideClass.js"></script>
+</head>
+<body>
+<button onclick = "showHideClass('classes')">Hide Classes</button>
+<button onclick = "showHideClass('functions')">Hide Functions</button>
+<button onclick = "showHideClass('comments')">Hide Comments</button><br>No Dependency found<pre>
+<div class="comments">///////////////////////////////////////////////////////////////////////////</div>
+<div class="comments">// Converter.h   : defines source code conversion to webpage functions   //</div>
+<div class="comments">// ver 1.1                                                               //</div>
+<div class="comments">//                                                                       // </div>
+<div class="comments">// Platform      : Visual Studio Enterprise 2017, Windows 10 Pro x64     //</div>
+<div class="comments">// Author        : Anirudh Shankar Raman, Syracuse University            //</div>
+<div class="comments">//                 CSE687 - Object Oriented Design, Spring 2019          //</div>
+<div class="comments">///////////////////////////////////////////////////////////////////////////</div>
+<div class="comments">/*
+*  Package Operations:
+* =======================
+*  This package defines CodeConverter class which accepts DependencyTable
+*  and uses its relationships to create linked webpages that point to each
+*  other based on dependencies. It can also convert single files if needed.
+*  The conversion process filters HTML special characters before printing
+*  them into output files. The resulting output of this converter is a list
+*  of files (vector&lt;string&gt;) of the created webpages. There is also an added
+*  functionality where &lt;div&gt; and &lt;/div&gt; are inserted at the start and end of
+*  comments, classes and functions.
+*
+* Required Files:
+ * ===============
+ * FileSystem.h, FileSystem.cpp
+ * display.h, display.cpp
+ * dependencies.h, dependencies.cpp
+*
+*  Maintenance History:
+* =======================
+*  ver 1.1 - 14 Mar 2019
+*  - second release
+*  ver 1.0 : 6 Jan 2019
+*  - first release
+*/</div>
+
+#pragma once
+#include&lt;vector&gt;
+#include&lt;iostream&gt;
+#include "../DirectoryNavigator/FileSystem/FileSystem.h"
+#include "../display/display.h"
+#include &lt;fstream&gt;
+#include&lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;map&gt;
+#include"../DependencyAnalyzer/DependencyAnalyzer.h"
+
+using TypeInfoT = std::map&lt;std::string, std::map&lt;std::size_t, DependencyAnalysis::TypeInfo&gt;&gt;;
+namespace HTML
+{
+	class converter
+<div class="classes">	{
+	public:
+
+		converter();
+		~converter();
+
+		std::string cppToHtml(std::string filesToProcess_, std::map&lt;std::string, std::vector&lt;std::string&gt;&gt; depT, const TypeInfoT &typeTable);
+		void dependenciesFetch(std::string &filesToProcess, const std::map&lt;std::string, std::vector&lt;std::string&gt;&gt; &depTable, std::ofstream &webpageOutput);
+		void HandlingComments(std::vector&lt;std::string&gt; &filedata, const TypeInfoT &typeTable);
+		void DivTagsAdded(std::string &file, std::vector&lt;std::string&gt; &filedata, const TypeInfoT &typeTable);
+		void SwitchFn(size_t &i, std::vector&lt;std::string&gt; &filedata, std::map&lt;std::size_t, DependencyAnalysis::TypeInfo&gt;::const_iterator &iter2, size_t lineNo);
+		void HandlingClasses(size_t &i, std::vector&lt;std::string&gt; &filedata, size_t &lineNo);
+		void HandlingFunctions(size_t &i, std::vector&lt;std::string&gt; &filedata, size_t &lineNo);
+		void HandlingSingleLnFOpen(size_t &i, std::vector&lt;std::string&gt; &filedata, size_t &lineNo);
+		void HandlingSingleLnFClose(size_t &i, std::vector&lt;std::string&gt; &filedata, size_t &lineNo);
+	};</div>
+};</div>
+
+</pre>
+</body
+></html
+>
